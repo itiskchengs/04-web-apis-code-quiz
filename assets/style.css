@@ -1,0 +1,34 @@
+.topSection{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0rem 4rem;
+}
+.topSectionChild{
+    flex-direction: row;
+}
+.quizContainer{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 70%;
+    margin: 10rem auto;
+    
+}
+.quizContainer h1{
+    font-size: 2.5rem;
+    text-transform: uppercase;
+}
+.quizContainer p{
+    font-size: 1.5rem;
+    margin: 0px 0px 25px 0px;
+}
+.quizContainer button{
+    font-size: 1.5rem;
+    background-color: turquoise;
+    border: none;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    width: 30%;
+    margin: auto;
+}
