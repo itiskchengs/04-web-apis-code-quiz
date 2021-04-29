@@ -20,12 +20,19 @@ var startContainer = document.querySelector('.quizStart');
 var questionsContainer = document.querySelector('#questionContainer');
 var question = document.querySelector('#question');
 var choices = document.querySelectorAll('.btn-text');
+var gameOverContainer = document.querySelector('#quizEnd');
+var formContainer = document.querySelector('#formContainer');
+var gameOverHeading = document.querySelector('#quizEndHeading');
+var gameOverParagraph = document.querySelector('#quizEndScore');
+var gameOverInitial = document.querySelector('#initialName');
+var gameOverSubmit = document.querySelector('#subBtn');
 
 //Adding Eventlistener to the DOM elements 
 startBtn.addEventListener('click', startQuiz);
+gameOverSubmit.addEventListener('click', submitInitial);
 
 //Setting the timer
-var timer = 72;
+var timer = 20;
 
 //Question counter
 var questionCounter = 0;
@@ -51,7 +58,7 @@ var questionBank = [
     {
         question: 'A very useful tool used during development and debugging for printing content to the debugger is:',
         choices: ['JavaScript', 'terminal/bash', 'for loops', 'console.log'],
-        answer: 'console log'
+        answer: 'console.log'
     }
 ];
 
@@ -69,7 +76,8 @@ function startQuiz() {
 function generateQuestions() {
     //If statement to check if there are no more questions left in the question bank.
     if (questionBank.length === 0) {
-        return console.log('Game Over');
+        timer = 1;
+        return gameOver();
     }
 
     //Generates a random number from the length of the questions array
@@ -91,7 +99,6 @@ function generateQuestions() {
         var choicesLister = choices[i];
         choicesLister.innerHTML = currQuestion.choices[i];
     }
-
 }
 
 //For loop that runs through the document query selector all of choices and adds an event listerner to each choice button that listens for a click and runs the submit answer function
@@ -101,25 +108,43 @@ for (var i = 0; i < choices.length; i++) {
 
 //This function runs when a choice is clicked
 function submitAnswer(e) {
-console.log(e);
-console.log(e.target);
-console.log(e.target.innerHTML);
-//When you click the button it grabs the event which is itself then then target within the event and then the innerHTML that is within the target and gives you a string back
-var userSubmittedAnswer = e.target.innerHTML;
-//Grabs the current question object and grabs the answer out of that object
-var answer = currQuestion.answer;
+    console.log(e);
+    console.log(e.target);
+    console.log(e.target.innerHTML);
+    //When you click the button it grabs the event which is itself then then target within the event and then the innerHTML that is within the target and gives you a string back
+    var userSubmittedAnswer = e.target.innerHTML;
+    //Grabs the current question object and grabs the answer out of that object
+    var answer = currQuestion.answer;
 
-//Conditional logic if the answers equal each other then do this. If not then do this.
-if(userSubmittedAnswer === answer){
-    console.log('correct answer');
-    generateQuestions();
-    score++;
-}else{
-    console.log('incorrect answer');
-    generateQuestions();
-    timer -= 10;
+    //Conditional logic if the answers equal each other then do this. If not then do this.
+    if (userSubmittedAnswer === answer) {
+        console.log('correct answer');
+        generateQuestions();
+        score++;
+    } else {
+        console.log('incorrect answer');
+        generateQuestions();
+        timer -= 10;
+    }
 }
+
+function gameOver() {
+    gameOverContainer.classList.remove('hide');
+    formContainer.classList.remove('hide');
+    questionsContainer.classList.add('hide');
+    gameOverHeading.innerHTML = "Game is over!"
+    gameOverParagraph.innerHTML = "Your final score is " + score;
 }
+
+function submitInitial(){
+    event.preventDefault();
+    var nickname = {
+        name: gameOverInitial.value,
+        score: score
+    }
+    localStorage.setItem("nickName", JSON.stringify(nickname));
+}
+var test = JSON.parse(localStorage.getItem("nickName"))
 
 //Create a game over function that runs the end screen once you run out of time or you finish the quiz
 
@@ -129,13 +154,19 @@ if(userSubmittedAnswer === answer){
 
 
 //Timer variable 
-function timerCountdown(){
-var timeInterval = setInterval(function () {
-    timer--;
-    displayTimer.textContent = 'Time left: ' + timer;
-    if (timer <= 0) {
-        clearInterval(timeInterval)
-        console.log('It went to the countdown');
-    }
-}, 1000)
+function timerCountdown() {
+    var gameOverCheck = gameOverContainer.classList[0];
+    var timeInterval = setInterval(function () {
+        timer--;
+        displayTimer.textContent = 'Time left: ' + timer;
+        if (timer <= 0) {
+            clearInterval(timeInterval)
+            console.log('It went to the countdown');
+            if (gameOverCheck === 'hide') {
+                gameOver();
+            } else {
+                console.log('Game over Screen is already active');
+            }
+        }
+    }, 1000)
 }
