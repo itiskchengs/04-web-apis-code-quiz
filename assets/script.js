@@ -26,10 +26,16 @@ var gameOverHeading = document.querySelector('#quizEndHeading');
 var gameOverParagraph = document.querySelector('#quizEndScore');
 var gameOverInitial = document.querySelector('#initialName');
 var gameOverSubmit = document.querySelector('#subBtn');
+var highscoreContainer = document.querySelector('#highscoreSection');
+var highscoreHeading = document.querySelector('#highscoresHeading');
+var highscoreTable = document.querySelector('.highscoreList');
+var highscoreReset = document.querySelector('#highscoreReset');
+var highscoreClear = document.querySelector('#highscoreClear');
 
 //Adding Eventlistener to the DOM elements 
 startBtn.addEventListener('click', startQuiz);
 gameOverSubmit.addEventListener('click', submitInitial);
+highscoreReset.addEventListener('click', restart);
 
 //Setting the timer
 var timer = 20;
@@ -37,11 +43,17 @@ var timer = 20;
 //Question counter
 var questionCounter = 0;
 
+//Higscore Counter
+var highscoreCounter = 0;
+
 //Score counter
 var score = 0;
 
 //Current question
 var currQuestion = {};
+
+//Higscore List
+var highscoreList = {};
 
 //Setting up the object with questions 
 var questionBank = [
@@ -136,15 +148,55 @@ function gameOver() {
     gameOverParagraph.innerHTML = "Your final score is " + score;
 }
 
-function submitInitial(){
-    event.preventDefault();
-    var nickname = {
+//function that sets item in the local storage as a string. /*PROBLEM IM HAVING IS THAT ITS NOT STORING MORE THEN ONE NAME AND SCORE WHEN YOU CLIKC SUBMIT*/
+function submitInitial(e) {
+    e.preventDefault();
+    var nickname = [{
         name: gameOverInitial.value,
         score: score
-    }
+    }];
     localStorage.setItem("nickName", JSON.stringify(nickname));
+    highScore();
+
+
 }
-var test = JSON.parse(localStorage.getItem("nickName"))
+
+function highScore() {
+    highscoreContainer.classList.remove('hide');
+    gameOverContainer.classList.add('hide');
+    formContainer.classList.add('hide');
+
+    var highscoreGetItem = JSON.parse(localStorage.getItem("nickName"));
+    //console.log(test);
+    //console.log(test.length);
+    //console.log(test[0]);
+    //console.log(highscoreList[0].name);     
+
+    for (var i = 0; i < highscoreGetItem.length; i++) {
+        highscoreList = highscoreGetItem[highscoreCounter];
+        highscoreGetItem.splice(highscoreCounter, 1);
+        var highscoreName = highscoreList.name;
+        var highscoreScore = highscoreList.score;
+        var highscoreTitle = document.createElement('p');
+        var highscorePoints = document.createElement('p');
+        highscoreTitle.classList.add('#highscoreName');
+        highscorePoints.classList.add('#highscoreScore');
+        highscoreTitle.textContent = highscoreName;
+        highscorePoints.textContent = highscoreScore;
+        console.log(highscoreTitle);
+        console.log(highscorePoints);
+        highscoreTable.append(highscoreTitle);
+        highscoreTable.append(highscorePoints);
+
+    }
+}
+
+function restart(){
+    highscoreContainer.classList.add('hide');
+    startContainer.classList.remove('hide');
+}
+
+//HIGHSCORE SOLUTION could be once its set in the local storage and it gets parsed back to an object we can save the object in an empty object and save the highscores in the variable there.
 
 //Create a game over function that runs the end screen once you run out of time or you finish the quiz
 

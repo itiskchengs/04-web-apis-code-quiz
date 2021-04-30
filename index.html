@@ -40,10 +40,23 @@
         <h2 id="quizEndHeading"></h2>
         <p id="quizEndScore"></p>
         <form id="formContainer" class="hide">
-        <label id="labelName" for="initials">Enter Initials:</label>
-        <input type="text" id="initialName" name="initials">
-        <input type ="submit" id="subBtn" value ="submit">
+            <label id="labelName" for="initials">Enter Initials:</label>
+            <input type="text" id="initialName" name="initials">
+            <input type="submit" id="subBtn" value="submit">
         </form>
+    </div>
+    <div id="highscoreSection" class="hide">
+        <h2 id="highscoresHeading">Highscores</h2>
+        <div class="highscoreTitlesContainer">
+        <h3 class="highscoreTitles">Name</h3>
+        <h3 class="highscoreTitles">score</h3>
+        </div>
+        <div class="highscoreList">
+        </div>
+        <div class="highscoreBtnContainer">
+            <button id="highscoreReset">Go Back</button>
+            <button id="highscoreClear">Clear Highscores</button>
+        </div>
     </div>
     <script src="assets/script.js"></script>
 </body>
