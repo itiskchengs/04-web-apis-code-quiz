@@ -1,20 +1,4 @@
-//When you click the start button  --> DOM eventlisterner that listens for a click and runs a function.
-//It starts the quiz -> Function that starts the quiz
-//It also starts the timer  -> Create a variable that runs the timer. In the quiz function take one second off the timer using the set time out.
-//Display the questions and choices on the page.
-//When you answer it correct display on the bottom that you answered correctly and move on to the next question (bonus you can add like 5 seconds to the timer if you get it right)
-//When you answer it wrong display on the bottom that you answered it incorrectly and move to the next question and also take time off the timer. 
-//When you answer all the questions or the timer reaches 0 the game is over. 
-//When the game is over It shows All done your final score is and then the score of the amount they won.
-//Then you can write in your initials and the score and your initials is saved to the highscore list. -> Save it to local storage. 
-//When you click on highscore shows the highscore of the people that played. -> Use Local storage with Json stringify and Json Parse to get back the object. Then probably yse dot notation to grab the data.
-//On the highscore page 
-//When you click submit your score and initals it will bring you to the highscore screen where you can go back to the start quiz screen or clear your highscore 
-//The clear your highscore will clear the highscore from the highscore page.
-//Use data attributes too.
-
-//Gathering DOM elements on the page. 
-//Start button that is used in the start function
+//Gathering DOM elements on the page 
 var startBtn = document.querySelector('#startBtn');
 var displayTimer = document.querySelector('#timer');
 var viewHighscore = document.querySelector('#highscore');
@@ -39,26 +23,14 @@ startBtn.addEventListener('click', startQuiz);
 gameOverSubmit.addEventListener('click', submitInitial);
 highscoreReset.addEventListener('click', restart);
 highscoreClear.addEventListener('click', clearHighscore);
-viewHighscore.addEventListener('click', highScore);
+viewHighscore.addEventListener('click', showHighScore);
 
-
-
-//Setting the timer
-var timer = 20;
-
-//Question counter
+//Setting all the global variables needed
+var timer = 40;
 var questionCounter = 0;
-
-//Higscore Counter
 var highscoreCounter = 0;
-
-//Score counter
 var score = 0;
-
-//Current question
 var currQuestion = {};
-
-//Higscore List
 var highscoreList = {};
 
 //Setting up the object with questions 
@@ -77,47 +49,45 @@ var questionBank = [
         question: 'A very useful tool used during development and debugging for printing content to the debugger is:',
         choices: ['JavaScript', 'terminal/bash', 'for loops', 'console.log'],
         answer: 'console.log'
-    }
+    },
+    {
+        question: 'What is DOM',
+        choices: ['Document Object Model', 'Donut Object Modal', 'shore loops', 'console.log'],
+        answer: 'Document Object Model'
+    },
+    {
+        question: 'What is "This" keyword',
+        choices: ['It refers to another function', 'Refers to the object that the function is a property of', 'all the for loops', 'DOM'],
+        answer: 'Refers to the object that the function is a property of'
+    },
+    
 ];
 
-//this function runs when the start screen button is clicked
+//This function runs when the start buttons is clicked. Resets the question and score counter. Sets the timer to 40 seconds. Adds and remove the hide class and runs two other functions. Which is the timer function and the generate questions function.
 function startQuiz() {
     questionCounter = 0;
     score = 0;
-    timer = 20;
+    timer = 40;
     startContainer.classList.add('hide');
     questionsContainer.classList.remove('hide');
+    viewHighscore.classList.add('hide');
     timerCountdown();
     generateQuestions();
 }
 
 //This function generates the question when its the button is clicked and its called for
 function generateQuestions() {
-    //If statement to check if there are no more questions left in the question bank.
-    if (questionCounter === 3) {
-        timer = 1;
+    //If statement to check if the question counter is equal to 5. Then it knows its at the end of the questions and it runs the gamer over function.
+    if (questionCounter === 5) {
+        timer = 0;
         return gameOver();
     }
-
+    //This is where you display the questions and each time you display a question the question counter goes up by one. The if statment check that if the length of question bank is greater then question counter then it will continute running.
     if (questionBank.length > questionCounter) {
         currQuestion = questionBank[questionCounter];
         question.innerHTML = currQuestion.question;
         questionCounter++;
     }
-
-    //Generates a random number from the length of the questions array
-    //var questionIndex = Math.floor(Math.random() * questionBank.length);
-    //console.log(questionIndex);
-
-    //sets the current questions empty array to the random question that was grabbed.
-    //currQuestion = questionBank[questionIndex];
-
-    //Set the question innerHTML to the currQuestion variable question.
-
-    //Array splice method that removes an element from the array. So it uses random number that we created to get a number that is placed first to grab the index of where you want to remove the element and then after comma you tell it how many elements you want to remove.
-    //questionBank.splice(questionCounter, 1);
-
-
 
     //Loops through 4 times and sets the innertext of each button to be the different choices in the object array. 
     for (var i = 0; i < 4; i++) {
@@ -131,17 +101,14 @@ for (var i = 0; i < choices.length; i++) {
     choices[i].addEventListener('click', submitAnswer);
 }
 
-//This function runs when a choice is clicked
+//This function runs when a choice is clicked and check if the answer is correct or wrong
 function submitAnswer(e) {
-    console.log(e);
-    console.log(e.target);
-    console.log(e.target.innerHTML);
-    //When you click the button it grabs the event which is itself then then target within the event and then the innerHTML that is within the target and gives you a string back
+    //When you click the button it grabs the event which is itself then target within the event and then the innerHTML that is within the target and gives you a string back
     var userSubmittedAnswer = e.target.innerHTML;
-    //Grabs the current question object and grabs the answer out of that object
+    //Grabs the currQuestion answer 
     var answer = currQuestion.answer;
 
-    //Conditional logic if the answers equal each other then do this. If not then do this.
+    //Conditional logic if the answers equal each other then the score goes up by one and moves on to the next question. If not then take ten seconds off the timer and move on to the next question.
     if (userSubmittedAnswer === answer) {
         console.log('correct answer');
         generateQuestions();
@@ -153,15 +120,19 @@ function submitAnswer(e) {
     }
 }
 
+//This runs the game over function that shows the score screen and has a input field where you can submit your initials to the highscore screen
 function gameOver() {
     gameOverContainer.classList.remove('hide');
     formContainer.classList.remove('hide');
     questionsContainer.classList.add('hide');
     gameOverHeading.innerHTML = "Game is over!"
     gameOverParagraph.innerHTML = "Your final score is " + score;
+    if(timer === -1){
+
+    }
 }
 
-//function that sets item in the local storage as a string. /*PROBLEM IM HAVING IS THAT ITS NOT STORING MORE THEN ONE NAME AND SCORE WHEN YOU CLIKC SUBMIT*/
+//Function that sets item in the local storage as a string.
 function submitInitial(e) {
     e.preventDefault();
     var nickname = [{
@@ -170,23 +141,28 @@ function submitInitial(e) {
     }];
     localStorage.setItem("nickName", JSON.stringify(nickname));
     highScore();
-
-
 }
 
+//Runs the show highscore fucntion when you click the button and shows the highscore page
+function showHighScore(){
+    highscoreContainer.classList.remove('hide');
+    gameOverContainer.classList.add('hide');
+    formContainer.classList.add('hide');
+    startContainer.classList.add('hide');
+    viewHighscore.classList.add('hide');
+}
+
+//Runs the highscore function where it hides the containers needed to and goes in local storage and gets the item called nickName but also parses it so it comes back as an object. Runs a for loop that creates a p tag which is appended to the highscore title and points and displays the names the user submitted and his score.
 function highScore() {
     highscoreContainer.classList.remove('hide');
     gameOverContainer.classList.add('hide');
     formContainer.classList.add('hide');
     startContainer.classList.add('hide');
+    viewHighscore.classList.add('hide');
 
     if (localStorage.getItem('nickName')) {
 
-        var highscoreGetItem = JSON.parse(localStorage.getItem('nickName'));
-        //console.log(test);
-        //console.log(test.length);
-        //console.log(test[0]);
-        //console.log(highscoreList[0].name);     
+        var highscoreGetItem = JSON.parse(localStorage.getItem('nickName'));    
 
         for (var i = 0; i < highscoreGetItem.length; i++) {
             highscoreList = highscoreGetItem[highscoreCounter];
@@ -199,8 +175,6 @@ function highScore() {
             highscorePoints.classList.add('#highscoreScore');
             highscoreTitle.textContent = highscoreName;
             highscorePoints.textContent = highscoreScore;
-            console.log(highscoreTitle);
-            console.log(highscorePoints);
             highscoreTable.append(highscoreTitle);
             highscoreTable.append(highscorePoints);
 
@@ -208,26 +182,20 @@ function highScore() {
     }
 }
 
+//Clear the highscore table and clears the local storage once that button is clicked to run the clear highscore function.
 function clearHighscore(){
     highscoreTable.innerHTML = '';
     localStorage.clear();
 }
 
+//When you clikc the go back button on the highscore screen it restarts the game and goes back to the starting screen
 function restart() {
     highscoreContainer.classList.add('hide');
     startContainer.classList.remove('hide');
+    viewHighscore.classList.remove('hide');
 }
 
-//HIGHSCORE SOLUTION could be once its set in the local storage and it gets parsed back to an object we can save the object in an empty object and save the highscores in the variable there.
-
-//Create a game over function that runs the end screen once you run out of time or you finish the quiz
-
-//Dont have to use randomly get the questions. They can all be the same.
-
-//Create the html out for that game over section but hide it first and only show it when the user meets the requirement to get to the end.
-
-
-//Timer variable 
+//Timer function to run when you click start game and it conintues to countdown until it hits the zero mark or if you answer through all the questions.
 function timerCountdown() {
     var gameOverCheck = gameOverContainer.classList[0];
     var timeInterval = setInterval(function () {
@@ -236,6 +204,7 @@ function timerCountdown() {
         if (timer <= 0) {
             clearInterval(timeInterval)
             console.log('It went to the countdown');
+            displayTimer.textContent = 'Time left: ' + 0;
             if (gameOverCheck === 'hide') {
                 gameOver();
             } else {

@@ -1,3 +1,37 @@
+/*=========================
+    ROOT COLORS
+=========================*/
+/*Setting up */
+:root{
+    --nightBlue: #457b9d;
+    --prussianBlue: #1d3557;
+    --powederBlue: #a8dadc;
+    --paleGreen: #f1faee;
+    --lipstickRed: #e63946;
+    --white: #fff;
+}
+
+/*===========================
+    GENERAL STYLES
+===========================*/
+
+*{
+    background: var(--nightBlue);
+    color: var(--white);
+    font-family: 'Lato', sans-serif;
+}
+h1, h2, h3, h4, h5, h6{
+    font-weight: 700;
+}
+p{
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+}
+
+/*==========================
+    TOP HEADER SECTION
+==========================*/
+
 .topSection{
     display: flex;
     justify-content: space-between;
@@ -7,6 +41,11 @@
 .topSectionChild{
     flex-direction: row;
 }
+
+/*==========================
+    STARTING QUIZ SECTION
+============================*/
+
 .quizStart{
     display: flex;
     flex-direction: column;
@@ -17,20 +56,33 @@
 .quizStart h1{
     font-size: 2.5rem;
     text-transform: uppercase;
+    margin: 4rem 0rem 0rem 0rem;
 }
 .quizStart p{
-    font-size: 1.5rem;
-    margin: 0px 0px 25px 0px;
+    font-size: 1.2rem;
+    margin: 1rem 0rem;
+    line-height: 1.5;
 }
 .quizStart button{
     font-size: 1.5rem;
-    background-color: turquoise;
+    background-color: var(--prussianBlue);
     border: none;
     text-transform: uppercase;
     padding: 5px 10px;
     width: 30%;
     margin: auto;
 }
+#highscore{
+    background: var(--powederBlue);
+    border: none;
+    padding: 0.5rem 1rem;
+    color: #1D3557;
+}
+
+/*============================
+    STARTING QUIZ CONTAINER
+=============================*/
+
 .quizContainer{
     display: flex;
     flex-direction: column;
@@ -38,12 +90,31 @@
     width: 70%;
     margin: 0rem auto;   
 }
+#question{
+    font-size: 2rem;    
+}
 .answer-square{
     display: flex;
     flex-direction: column;
     width: 30%;
     margin:auto;
+    margin-top: 1rem;
 }
+.answer-square button{
+    margin: 0.5rem 0rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    background: var(--paleGreen);
+    color: var(--prussianBlue);
+}
+.correct{
+    background-color: green;
+}
+
+/*===========================
+    GAME OVER CONTAINER
+===========================*/
+
 #quizEnd{
     display: flex;
     flex-direction: column;
@@ -51,17 +122,35 @@
     width: 70%;
     margin: 0rem auto;
 }
-#labelName{
+#quizEndHeading{
+    text-transform: uppercase;
+    font-size: 2.5rem;
+}
+#quizEndScore{
     font-size: 1.5rem;
+    font-weight: 700;
+}
+#labelName{
+    font-size: 1rem;
+    padding-right: 0.5rem;
     text-transform: uppercase;
 }
 #initialName{
     height: 20px;
-    border: 1px solid #000;
+    border: 1px solid var(--white);
 }
 #subBtn{
-    font-size: 1rem;
+    font-size: 1.2rem;
+    border: none;
+    background-color: var(--powederBlue);
+    margin-left: 0.5rem;
+    padding-bottom: 0.2rem;
 }
+
+/*==========================
+    HIGHSCORE CONTAINER
+==========================*/
+
 #highscoreSection{
     display: flex;
     flex-direction: column;
@@ -73,13 +162,21 @@
     font-size: 3rem;
     text-transform: uppercase;
 }
+#highscoresHeading{
+    font-size: 2.5rem;
+    text-transform: uppercase;
+}
 .highscoreBtnContainer button{
     border: none;
     text-transform: uppercase;
     padding: 1rem 1.5rem;
     margin:4rem 2rem;
-    background:wheat;
-    color:#fff;
+    background: var(--prussianBlue);
+    color: var(--white);
+}
+#highscoreClear{
+    background: var(--lipstickRed);
+    color: var(--white);
 }
 .highscoreList{
     display: flex;
