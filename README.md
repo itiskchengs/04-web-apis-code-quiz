@@ -21,4 +21,4 @@ In this project I built a quiz game from scratch. Created the HTML, CSS and java
 
 Below is the deployment github pages link.
 
-[03-homework-deployment-link](https://itiskchengs.github.io/04-web-apis-code-quiz/)
+[04-homework-deployment-link](https://itiskchengs.github.io/04-web-apis-code-quiz/)
