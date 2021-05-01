@@ -14,8 +14,10 @@
 //Use data attributes too.
 
 //Gathering DOM elements on the page. 
+//Start button that is used in the start function
 var startBtn = document.querySelector('#startBtn');
 var displayTimer = document.querySelector('#timer');
+var viewHighscore = document.querySelector('#highscore');
 var startContainer = document.querySelector('.quizStart');
 var questionsContainer = document.querySelector('#questionContainer');
 var question = document.querySelector('#question');
@@ -36,6 +38,10 @@ var highscoreClear = document.querySelector('#highscoreClear');
 startBtn.addEventListener('click', startQuiz);
 gameOverSubmit.addEventListener('click', submitInitial);
 highscoreReset.addEventListener('click', restart);
+highscoreClear.addEventListener('click', clearHighscore);
+viewHighscore.addEventListener('click', highScore);
+
+
 
 //Setting the timer
 var timer = 20;
@@ -78,6 +84,7 @@ var questionBank = [
 function startQuiz() {
     questionCounter = 0;
     score = 0;
+    timer = 20;
     startContainer.classList.add('hide');
     questionsContainer.classList.remove('hide');
     timerCountdown();
@@ -87,9 +94,15 @@ function startQuiz() {
 //This function generates the question when its the button is clicked and its called for
 function generateQuestions() {
     //If statement to check if there are no more questions left in the question bank.
-    if (questionBank.length === 0) {
+    if (questionCounter === 3) {
         timer = 1;
         return gameOver();
+    }
+
+    if (questionBank.length > questionCounter) {
+        currQuestion = questionBank[questionCounter];
+        question.innerHTML = currQuestion.question;
+        questionCounter++;
     }
 
     //Generates a random number from the length of the questions array
@@ -98,13 +111,13 @@ function generateQuestions() {
 
     //sets the current questions empty array to the random question that was grabbed.
     //currQuestion = questionBank[questionIndex];
-    currQuestion = questionBank[questionCounter];
 
     //Set the question innerHTML to the currQuestion variable question.
-    question.innerHTML = currQuestion.question;
 
     //Array splice method that removes an element from the array. So it uses random number that we created to get a number that is placed first to grab the index of where you want to remove the element and then after comma you tell it how many elements you want to remove.
-    questionBank.splice(questionCounter, 1);
+    //questionBank.splice(questionCounter, 1);
+
+
 
     //Loops through 4 times and sets the innertext of each button to be the different choices in the object array. 
     for (var i = 0; i < 4; i++) {
@@ -165,33 +178,42 @@ function highScore() {
     highscoreContainer.classList.remove('hide');
     gameOverContainer.classList.add('hide');
     formContainer.classList.add('hide');
+    startContainer.classList.add('hide');
 
-    var highscoreGetItem = JSON.parse(localStorage.getItem("nickName"));
-    //console.log(test);
-    //console.log(test.length);
-    //console.log(test[0]);
-    //console.log(highscoreList[0].name);     
+    if (localStorage.getItem('nickName')) {
 
-    for (var i = 0; i < highscoreGetItem.length; i++) {
-        highscoreList = highscoreGetItem[highscoreCounter];
-        highscoreGetItem.splice(highscoreCounter, 1);
-        var highscoreName = highscoreList.name;
-        var highscoreScore = highscoreList.score;
-        var highscoreTitle = document.createElement('p');
-        var highscorePoints = document.createElement('p');
-        highscoreTitle.classList.add('#highscoreName');
-        highscorePoints.classList.add('#highscoreScore');
-        highscoreTitle.textContent = highscoreName;
-        highscorePoints.textContent = highscoreScore;
-        console.log(highscoreTitle);
-        console.log(highscorePoints);
-        highscoreTable.append(highscoreTitle);
-        highscoreTable.append(highscorePoints);
+        var highscoreGetItem = JSON.parse(localStorage.getItem('nickName'));
+        //console.log(test);
+        //console.log(test.length);
+        //console.log(test[0]);
+        //console.log(highscoreList[0].name);     
 
+        for (var i = 0; i < highscoreGetItem.length; i++) {
+            highscoreList = highscoreGetItem[highscoreCounter];
+            highscoreGetItem.splice(highscoreCounter, 1);
+            var highscoreName = highscoreList.name;
+            var highscoreScore = highscoreList.score;
+            var highscoreTitle = document.createElement('p');
+            var highscorePoints = document.createElement('p');
+            highscoreTitle.classList.add('#highscoreName');
+            highscorePoints.classList.add('#highscoreScore');
+            highscoreTitle.textContent = highscoreName;
+            highscorePoints.textContent = highscoreScore;
+            console.log(highscoreTitle);
+            console.log(highscorePoints);
+            highscoreTable.append(highscoreTitle);
+            highscoreTable.append(highscorePoints);
+
+        }
     }
 }
 
-function restart(){
+function clearHighscore(){
+    highscoreTable.innerHTML = '';
+    localStorage.clear();
+}
+
+function restart() {
     highscoreContainer.classList.add('hide');
     startContainer.classList.remove('hide');
 }
